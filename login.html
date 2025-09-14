@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>uanID - Login</title>
+<style>
+  :root{
+    --blue-main: #508ce2;
+    --blue-dark: #094d7f;
+    --bg: #ffffff;
+    --input-bg: #f3f4f6;
+    --radius: 20px;
+    --form-width: 300px; /* ajuste se quiser maior/menor */
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: var(--bg);
+    color:#222;
+    position:relative;
+  }
+
+  html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* remove scroll horizontal e vertical */
+}
+
+  /* Círculo grande no canto superior direito (aparece incompleto) */
+.corner-circle {
+  position: absolute;
+  top: -110px;   /* negativo para cortar o círculo na viewport */
+  right: -110px;
+  width: 260px;
+  height: 260px;
+  background: var(--blue-main);
+  border-radius: 50%;
+  z-index: 5;
+  box-shadow: 0 6px 18px rgba(5,40,90,0.12);
+  overflow: hidden; /* impede que o conteúdo gere scroll extra */
+}
+
+/* Botão cadastrar posicionado no 3º quadrante */
+.corner-circle .cadastrar {
+  position: absolute;
+  bottom: 80px;   /* sobe mais */
+  left: 55px;     /* vai mais para a direita */
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  background: transparent;
+  transition:1s;
+}
+
+.corner-circle .cadastrar:hover{
+    transition:1s;
+    text-shadow: 1px 1px 1px black;
+}
+
+
+
+
+  /* Logo centralizada (altura e largura) */
+  .logo-wrap{
+    position:absolute;
+    left:50%;
+    top:40%;
+    transform: translate(-50%,-50%);
+    z-index:3;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    pointer-events:none;
+  }
+  .logo{
+    width:125px;
+    height:auto;
+    border-radius:20px;
+    background: #fff;
+    padding:12px;
+    box-shadow: 5px 8px 20px rgba(0,0,0,0.12);
+  }
+
+  /* Formulário fixado na parte inferior, centralizado horizontalmente */
+  .form-area{
+    position: absolute;
+    left:50%;
+    transform: translateX(-50%);
+    bottom: 56px; /* distância do rodapé como no protótipo */
+    width: var(--form-width);
+    max-width: 92%;
+    z-index:4;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+
+  /* Inputs: mesmas dimensões do botão */
+  .input-group{
+    position:relative;
+    width:100%;
+    margin-bottom:12px;
+  }
+  .input-group input{
+    width:100%;
+    padding:12px 14px 12px 44px;
+    border-radius: 15px;
+    border: 1.8px solid var(--blue-main);
+    background: var(--input-bg);
+    font-size:14px;
+    color:#0b2440;
+    outline:none;
+    box-shadow: 0 6px 14px rgba(5,40,90,0.05);
+  }
+  .input-group input::placeholder{ color: var(--blue-main); opacity:0.95; }
+  .input-group svg{
+    position:absolute;
+    left:12px;
+    top:50%;
+    transform: translateY(-50%);
+    width:18px;height:18px;
+    stroke: var(--blue-dark);
+    stroke-width:1.8;
+    fill:none;
+  }
+
+  /* Botão Entrar (mesma largura) */
+  .btn-enter{
+    width:100%;
+    padding:12px;
+    border-radius: 17px;
+    border: none;
+    background: var(--blue-main);
+    color:#fff;
+    font-weight:700;
+    font-size:15px;
+    cursor:pointer;
+    box-shadow: 0 8px 18px rgba(5,40,90,0.12);
+  }
+
+  /* Links alinhados à esquerda logo abaixo do botão */
+  .links {
+  width:100%;
+  margin-top:10px;
+  text-align:left;
+  font-size:13px;
+  line-height:1.1;
+}
+
+.links a {
+  text-decoration:none;
+  display:block;
+  margin-bottom:6px;
+}
+
+.links .blue {
+  color: var(--blue-main);
+  font-weight: 600;
+}
+
+.links .black {
+  color: #000;
+  font-weight: 400;
+}
+
+
+  /* Responsividade: em telas muito pequenas reduzimos form width */
+  @media (max-width:360px){
+    :root{ --form-width: 86%; }
+    .corner-circle{ width:200px;height:200px; top:-90px; right:-90px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- círculo cortado no canto (contém o link Cadastrar) -->
+  <div class="corner-circle" aria-hidden="true">
+    <a class="cadastrar" href="cadastrar.html">Cadastrar</a>
+  </div>
+
+  <!-- logo centralizada (use exatamente "uanID.png" na mesma pasta) -->
+  <div class="logo-wrap">
+    <img src="uanID.png" alt="uanID" class="logo">
+  </div>
+
+  <!-- formulário com inputs e botão (na parte inferior) -->
+  <div class="form-area" role="form" aria-label="Formulário de login">
+    <!-- input email/celular -->
+    <div class="input-group">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 8.5L12 14l9-5.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="2" y="4" width="20" height="16" rx="4" ry="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <input type="text" placeholder="email ou celular" inputmode="text" required/>
+    </div>
+
+    <!-- input senha -->
+    <div class="input-group">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="6" y="10" width="12" height="8" rx="2" ry="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M8 10V8a4 4 0 018 0v2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <input type="password" placeholder="senha" required/>
+    </div>
+
+    <!-- botão entrar -->
+    <button class="btn-enter">Entrar</button>
+
+    <!-- links alinhados à esquerda -->
+    <div class="links">
+        <a href="#" class="forgot">
+            <span class="blue">Esqueci</span> <span class="black">minha senha!</span>
+        </a>
+        <a href="#" class="policy">
+            <span class="blue">Política</span> <span class="black">e</span> <span class="blue">serviços</span>
+        </a>
+    </div>
+
+
+</body>
+</html>

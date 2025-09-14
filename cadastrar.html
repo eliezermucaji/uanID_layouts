@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>uanID - Cadastro</title>
+<style>
+  :root{
+    --blue-main: #508ce2;
+    --blue-dark: #094d7f;
+    --bg: #ffffff;
+    --input-bg: #f3f4f6;
+    --radius: 12px;
+    --form-width: 340px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;width:100%;overflow:hidden;}
+  body{
+    font-family: Inter, system-ui, Arial;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 120px;
+    position: relative;
+  }
+
+  .corner-circle {
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 280px; height: 280px;
+    background: var(--blue-main);
+    border-radius: 50%;
+    z-index: 1;
+  }
+  .corner-circle .entrar {
+    position: absolute;
+    bottom: 95px; left: 60px;
+    color: #fff; font-weight: 700;
+    text-decoration: none; font-size: 14px;
+  }
+
+  .icon-top {
+    width: 80px;
+    height: 80px;
+    fill: var(--blue-main);
+    margin-bottom: 35%%;
+    margin-top: 35%;
+    z-index: 2;
+    transition: transform .5s ease, opacity .5s ease;
+  }
+
+  .form-container{
+    position: absolute;
+    width: var(--form-width);
+    height: 500px;
+    overflow: hidden;
+    bottom: -50px;
+  }
+  .form-step {
+    width: 100%;
+    background: #fff;
+    padding: 24px;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    position: absolute;
+    top: 0; left: 100%;
+    opacity: 0;
+    transition: all 0.5s ease;
+  }
+  .form-step.active{ left: 0; opacity: 1; }
+  .form-step.exit-left{ left: -100%; opacity: 0; }
+  .form-step.exit-right{ left: 100%; opacity: 0; }
+
+  h2{
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--blue-dark);
+    margin-bottom: 10px;
+    border-bottom: 2px solid var(--blue-main);
+    display: inline-block;
+    padding-bottom: 4px;
+  }
+
+  .input-group{
+    display: flex; align-items: center;
+    background: var(--input-bg);
+    border: 1px solid var(--blue-main);
+    border-radius: var(--radius);
+    padding: 8px;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  .input-group input, .input-group select{
+    border: none; outline: none;
+    background: transparent;
+    flex: 1; font-size: 14px;
+    margin-left: 6px;
+  }
+  .input-group svg{
+    width: 15px; height: 18px;
+    fill: var(--blue-main);
+  }
+
+  .two-cols{
+    display: flex; gap: 8px;
+  }
+  .two-cols .input-group{ flex:1; }
+
+  .phone-group{
+    display: flex; gap: 8px;
+  }
+  .phone-group select{
+    width: 80px;
+  }
+
+  .btn{
+    margin-top: 12px;
+    width: 100%; padding: 12px;
+    border: none; border-radius: var(--radius);
+    background: var(--blue-main);
+    color: #fff; font-weight: 600;
+    cursor: pointer; font-size: 15px;
+    transition: all .3s ease;
+  }
+  .btn:hover{ background: var(--blue-dark); transform: translateY(-2px); }
+
+  .btn-back{
+    background: transparent;
+    color: var(--blue-dark);
+    font-weight: 600; cursor: pointer;
+    border: none; margin-top: 4px;
+    text-align: left;
+  }
+
+  /* Modal Avatar */
+  .modal{
+    position: fixed; top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.6);
+    display:flex; align-items:center; justify-content:center;
+    z-index:1000;
+    animation: fadeInUp .6s ease;
+  }
+  .modal.fadeOut{ animation: fadeOutTop .6s forwards; }
+  .modal-content{
+    background: linear-gradient(135deg,#ffffff,#f8fbff);
+    border-radius:20px;
+    padding:30px 25px;
+    text-align:center;
+    max-width:420px;
+    width:90%;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    transform: scale(0.9);
+    animation: zoomIn .5s ease forwards;
+  }
+  .avatar-img{
+    width:120px; height:120px;
+    border-radius:50%; margin-bottom:16px;
+    border:4px solid var(--blue-main);
+    object-fit:cover;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .modal h3{ color: var(--blue-dark); margin-bottom:10px; font-size:20px; }
+  .modal p{ font-size:15px; margin-bottom:20px; line-height:1.6; color:#444; }
+
+  @keyframes fadeInUp{ from{opacity:0;transform:translateY(40px);} to{opacity:1;transform:translateY(0);} }
+  @keyframes fadeOutTop{ from{opacity:1;transform:translateY(0);} to{opacity:0;transform:translateY(-40px);} }
+  @keyframes zoomIn{ from{transform:scale(0.9);opacity:0;} to{transform:scale(1);opacity:1;} }
+
+  /* Chat */
+  .chat-ball{
+    position: fixed;
+    top: 20px; left: 20px;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: none;
+    align-items: center; justify-content: center;
+    cursor: pointer;
+    z-index: 2000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+  .chat-ball img{
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .chat-widget{
+    position: fixed;
+    top: 20px; left: 20px;
+    width: 260px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    font-family: Inter, sans-serif;
+    z-index: 2000;
+    user-select: none;
+    display: none;
+  }
+  .chat-header{
+    display: flex; align-items: center;
+    background: #508ce2;
+    color: #fff;
+    padding: 8px;
+    border-radius: 12px 12px 0 0;
+    cursor: move;
+  }
+  .chat-header img{
+    width: 24px; height: 24px;
+    margin-right: 8px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .chat-body{ padding: 10px; font-size: 14px; color: #333; }
+  #chatOptions button{
+    margin: 5px 5px 0 0;
+    background: #508ce2;
+    color:#fff;
+    border:none;
+    border-radius: 8px;
+    padding: 5px 10px;
+    cursor:pointer;
+  }
+  #chatInputArea{
+    margin-top: 10px;
+    display: flex;
+  }
+  #chatInputArea input{
+    flex:1;
+    padding:6px;
+    border:1px solid #ccc;
+    border-radius: 8px;
+  }
+  #chatInputArea button{
+    margin-left:6px;
+    background:#508ce2;
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    padding:6px 12px;
+    cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<!-- Modal -->
+<div id="avatarModal" class="modal">
+  <div class="modal-content">
+    <img src="avatares/avatar1.png" alt="Uanito Jr" class="avatar-img">
+    <h3>Olá, eu sou o Uanito Jr 👋</h3>
+    <p>
+      Seja bem-vindo à <b>uanID</b>, uma plataforma académica desenvolvida por 
+      <b>Eliezer Mucaji</b>, estudante de Ciências da Computação.<br><br>
+      Nosso objectivo é <b>consolidar, aumentar e desenvolver o espírito académico</b>.  
+      Eu gostaria muito que você se cadastrasse aqui. Venha e pertença a este novo mundo! 🌍
+    </p>
+    <button class="btn" onclick="closeModal()">Começar</button>
+  </div>
+</div>
+
+<div class="corner-circle">
+  <a class="entrar" href="login.html">Entrar</a>
+</div>
+
+<!-- Ícone dinâmico -->
+<svg class="icon-top" id="stepIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 
+  1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+</svg>
+
+<!-- Formulário -->
+<div class="form-container">
+  <div class="form-step active" id="step1">
+    <h2>Dados pessoais</h2>
+
+    <!-- Nome -->
+    <div class="input-group">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 
+      2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 
+      1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/></svg>
+      <input type="text" placeholder="Nome completo">
+    </div>
+
+    <!-- Email -->
+    <div class="input-group">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2 4h20v16H2V4zm2 
+      2v.01L12 13l8-6.99V6H4z"/></svg>
+      <input type="email" placeholder="Email">
+    </div>
+
+    <!-- Data + Foto -->
+    <div class="two-cols">
+      <div class="input-group">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 
+        0-2 .9-2 2v14c0 1.1.9 2 
+        2 2h14c1.1 0 2-.9 
+        2-2V6c0-1.1-.9-2-2-2zm0 
+        16H5V9h14v11z"/></svg>
+        <input type="date" style="width:50%">
+      </div>
+      <div class="input-group">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 
+        0-2 .9-2 2v14c0 1.1.9 2 
+        2 2h14c1.1 0 2-.9 2-2zM5 
+        5h14v14H5V5zm7 2c-2.76 0-5 
+        2.24-5 5s2.24 5 5 
+        5 5-2.24 5-5-2.24-5-5-5z"/></svg>
+        <input type="file" accept="image/*" style="width:50%">
+      </div>
+    </div>
+
+    <!-- Telefone -->
+    <div class="phone-group">
+      <div class="input-group">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.62 10.79a15.91 
+        15.91 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 
+        1.02-.24 1.12.37 2.33.57 
+        3.57.57.55 0 1 .45 1 
+        1V20c0 .55-.45 1-1 
+        1C10.07 21 3 13.93 3 
+        5c0-.55.45-1 1-1h3.5c.55 0 
+        1 .45 1 1 0 1.24.2 2.45.57 
+        3.57.11.35.03.74-.24 1.02l-2.21 
+        2.2z"/></svg>
+        <select>
+          <option value="+244" selected>+244</option>
+          <option value="+55">+55</option>
+          <option value="+351">+351</option>
+          <option value="+1">+1</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <input type="tel" placeholder="Número de telefone"  style="width:50%">
+      </div>
+    </div>
+
+    <button class="btn" onclick="nextStep()">Avançar ➝</button>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="form-step" id="step2">
+    <h2>Dados acadêmicos</h2>
+    <div class="input-group">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 
+      5h16v2H4z"/></svg>
+      <input type="text" placeholder="Universidade ou Faculdade">
+    </div>
+    <button class="btn" onclick="submitForm()">Terminar</button>
+    <button class="btn-back" onclick="prevStep()">← Voltar</button>
+  </div>
+</div>
+
+<!-- Chat Bolinha -->
+<div id="chatBall" class="chat-ball">
+  <img src="avatares/avatar1.png" alt="Uanito Jr">
+</div>
+
+<!-- Chat Flutuante -->
+<div id="chatWidget" class="chat-widget">
+  <div class="chat-header" id="chatHeader">
+    <img src="avatares/avatar1.png" alt="uanID" class="chat-logo">
+    <span>Uanito Jr</span>
+  </div>
+  <div class="chat-body">
+    <div id="chatMessage"></div>
+    <div id="chatOptions" style="display:none;">
+      <button onclick="chatRespond('sim')">Sim</button>
+      <button onclick="chatRespond('nao')">Não</button>
+    </div>
+    <div id="chatInputArea" style="display:none;">
+      <input type="text" id="chatInput" placeholder="Digite sua mensagem...">
+      <button onclick="sendMessage()">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentStep = 1;
+
+  // Modal
+  window.onload = () => { document.getElementById("avatarModal").style.display = "flex"; };
+  function closeModal(){
+    const modal = document.getElementById("avatarModal");
+    modal.classList.add("fadeOut");
+    setTimeout(()=> {
+      modal.style.display="none";
+      document.getElementById("chatBall").style.display="flex";
+    },600);
+  }
+ function updateIcon(step){
+    const icon = document.getElementById("stepIcon");
+    icon.style.opacity = 0;
+    setTimeout(()=>{ 
+      if(step === 1){
+        icon.innerHTML = `<path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 
+        5 2.3 5 5 5zm0 2c-3.3 0-10 
+        1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>`;
+      } else {
+        icon.innerHTML = `<path d="M12 2L1 7l11 5 9-4.09V17h2V7L12 2z"/>`;
+      }
+      icon.style.opacity = 1;
+    },300);
+  }
+
+  function nextStep(){
+    let current = document.getElementById("step"+currentStep);
+    current.classList.remove("active");
+    current.classList.add("exit-left");
+    currentStep++;
+    let next = document.getElementById("step"+currentStep);
+    next.classList.add("active");
+    updateIcon(currentStep);
+    setTimeout(()=>current.classList.remove("exit-left"),500);
+  }
+  function prevStep(){
+    let current = document.getElementById("step"+currentStep);
+    current.classList.remove("active");
+    current.classList.add("exit-right");
+    currentStep--;
+    let prev = document.getElementById("step"+currentStep);
+    prev.classList.add("active");
+    updateIcon(currentStep);
+    setTimeout(()=>current.classList.remove("exit-right"),500);
+  }
+
+  function submitForm(){ alert("Cadastro concluído! 🎉"); }
+
+  // Chat
+  const chatBall = document.getElementById("chatBall");
+  const chatWidget = document.getElementById("chatWidget");
+
+  chatBall.onclick = ()=>{ openChat(); };
+
+  function openChat(){
+    chatBall.style.display="none";
+    chatWidget.style.display="block";
+    typeMessage("Olá 👋 Precisa de ajuda?", ()=>{ document.getElementById("chatOptions").style.display="block"; });
+  }
+
+  function typeMessage(text, callback){
+    const msgDiv = document.getElementById("chatMessage");
+    msgDiv.innerHTML = "";
+    let i=0;
+    const interval = setInterval(()=>{
+      msgDiv.innerHTML += text.charAt(i);
+      i++;
+      if(i>=text.length){ clearInterval(interval); if(callback) callback(); }
+    },50);
+  }
+
+  function chatRespond(answer){
+    document.getElementById("chatOptions").style.display="none";
+    if(answer==="sim"){
+      typeMessage("Ok, escreva sua dúvida abaixo 👇");
+      document.getElementById("chatInputArea").style.display="flex";
+    } else {
+      typeMessage("Beleza 👍 estarei aqui caso precise!");
+      setTimeout(()=>{ resetChat(); },2500);
+    }
+  }
+
+  function sendMessage(){
+    let val = document.getElementById("chatInput").value.trim();
+    if(val!==""){
+      typeMessage("Você: "+val);
+      if(val.toLowerCase().includes("adeus") || val.toLowerCase().includes("obrigado")){
+        setTimeout(()=>{ typeMessage("Até logo! 👋"); resetChat(); },2000);
+      }
+      document.getElementById("chatInput").value="";
+    }
+  }
+
+  function resetChat(){
+    document.getElementById("chatInputArea").style.display="none";
+    chatWidget.style.display="none";
+    chatBall.style.display="flex";
+  }
+
+  // Drag do chat
+  dragElement(chatWidget);
+  function dragElement(elmnt) {
+    const header = document.getElementById("chatHeader");
+    let pos1=0,pos2=0,pos3=0,pos4=0;
+    if(header){ header.onmousedown = dragMouseDown; }
+    function dragMouseDown(e){
+      e.preventDefault();
+      pos3 = e.clientX; pos4 = e.clientY;
+      document.onmouseup = closeDragElement;
+      document.onmousemove = elementDrag;
+    }
+    function elementDrag(e){
+      e.preventDefault();
+      pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY;
+      pos3 = e.clientX; pos4 = e.clientY;
+      elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+      elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    }
+    function closeDragElement(){ document.onmouseup = null; document.onmousemove = null; }
+  }
+</script>
+</body>
+</html>
