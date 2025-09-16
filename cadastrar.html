@@ -46,8 +46,7 @@
     width: 80px;
     height: 80px;
     fill: var(--blue-main);
-    margin-bottom: 35%%;
-    margin-top: 35%;
+    margin-bottom: 35%;
     z-index: 2;
     transition: transform .5s ease, opacity .5s ease;
   }
@@ -253,14 +252,15 @@
     <img src="avatares/avatar1.png" alt="Uanito Jr" class="avatar-img">
     <h3>Olá, eu sou o Uanito Jr 👋</h3>
     <p>
-      Seja bem-vindo à <b>uanID</b>, uma plataforma académica desenvolvida por 
-      <b>Eliezer Mucaji</b>, estudante de Ciências da Computação.<br><br>
-      Nosso objectivo é <b>consolidar, aumentar e desenvolver o espírito académico</b>.  
-      Eu gostaria muito que você se cadastrasse aqui. Venha e pertença a este novo mundo! 🌍
+      Bem-vindo à <b>uanID</b>, a plataforma académica feita especialmente para estudantes!<br><br>
+      Desenvolvida por <b>Eliezer Mucaji</b>, estudante de Ciências da Computação.<br><br>
+      Nosso objetivo é <b>fortalecer, inspirar e expandir o espírito académico</b>.<br>
+      Junte-se a nós e faça parte deste universo incrível de aprendizado e oportunidades!
     </p>
     <button class="btn" onclick="closeModal()">Começar</button>
   </div>
 </div>
+
 
 <div class="corner-circle">
   <a class="entrar" href="login.html">Entrar</a>
@@ -348,6 +348,36 @@
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 
       5h16v2H4z"/></svg>
       <input type="text" placeholder="Universidade ou Faculdade">
+    </div>
+    <!-- Data + Foto -->
+    <div class="two-cols">
+      <div class="input-group">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 
+        0-2 .9-2 2v14c0 1.1.9 2 
+        2 2h14c1.1 0 2-.9 
+        2-2V6c0-1.1-.9-2-2-2zm0 
+        16H5V9h14v11z"/></svg>
+        <input type="text" style="width:65%" placeholder="Curso">
+      </div>
+      <div class="input-group">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 
+        0-2 .9-2 2v14c0 1.1.9 2 
+        2 2h14c1.1 0 2-.9 2-2zM5 
+        5h14v14H5V5zm7 2c-2.76 0-5 
+        2.24-5 5s2.24 5 5 
+        5 5-2.24 5-5-2.24-5-5-5z"/></svg>
+        <input type="number" accept="image/*" style="width:35%" placeholder="Ano acade...">
+      </div>
+    </div>
+    <div class="input-group">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 
+      5h16v2H4z"/></svg>
+      <input type="text" placeholder="Apaixonado por...">
+    </div>
+    <div class="input-group">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 
+      5h16v2H4z"/></svg>
+      <input type="text" placeholder="Número de estudante">
     </div>
     <button class="btn" onclick="submitForm()">Terminar</button>
     <button class="btn-back" onclick="prevStep()">← Voltar</button>
